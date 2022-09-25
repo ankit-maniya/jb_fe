@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import useStyles from "./style";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 
 import {
   Text,
@@ -11,16 +11,17 @@ import {
   Checkbox,
   UnstyledButton,
   Indicator,
+  // FocusTrap,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
+import { IconPencil, IconTrash } from "@tabler/icons";
 
 import { HeaderCT, MantineGridTable } from "../../components";
 
 import { partyData, cuttingTypeData } from "../../utils/dummydata";
 import { tblHomeColumns } from "../../utils";
-import { IconPencil, IconTrash } from "@tabler/icons";
 import { getUniqueId } from "../../helpers";
 
 const SelectPartyItem = forwardRef(({ label, ...others }, ref) => (
@@ -127,6 +128,7 @@ const Home = () => {
   const resetUpdateForm = () => {
     form.reset();
     setIsUpdateId(null);
+    // dimondRef.current.focus();
   };
 
   const tblColumns = [
@@ -164,6 +166,8 @@ const Home = () => {
     d.value = d.c_id;
     return d;
   });
+
+  const dimondRef = useRef(null);
 
   return (
     <>
@@ -291,6 +295,7 @@ const Home = () => {
             </Grid.Col>
             <Grid.Col md={6} lg={2}>
               <NumberInput
+                ref={dimondRef}
                 label="Dimond Count"
                 placeholder="0"
                 value={form.values.l_numofdimonds}
