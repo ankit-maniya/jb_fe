@@ -11,7 +11,7 @@ export const SidebarCT = () => {
   ));
 
   return (
-    <Navbar height={800} className={classes.navbar}>
+    <Navbar height="100%" className={classes.navbar}>
       <Navbar.Section className={classes.header}>
         <div>
           <Avatar src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80" />
@@ -22,7 +22,7 @@ export const SidebarCT = () => {
         </div>
       </Navbar.Section>
 
-      <Navbar.Section grow component={ScrollArea}>
+      <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
         <div className={classes.linksInner}>{links}</div>
       </Navbar.Section>
     </Navbar>

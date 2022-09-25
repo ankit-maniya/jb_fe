@@ -1,216 +1,331 @@
-import { HeaderCT } from "../../components";
-import { forwardRef } from "react";
+/* eslint-disable react/display-name */
+import useStyles from "./style";
+import { forwardRef, useEffect, useState } from "react";
+
 import {
-  Group,
-  Avatar,
   Text,
   Select,
   Grid,
   NumberInput,
   Button,
+  Checkbox,
+  UnstyledButton,
+  Indicator,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 
-const data = [
-  {
-    image: "https://img.icons8.com/clouds/256/000000/futurama-bender.png",
-    label: "Bender Bending Rodríguez",
-    value: "Bender Bending Rodríguez",
-    description: "Fascinated with cooking",
-  },
+import { HeaderCT, MantineGridTable } from "../../components";
 
-  {
-    image: "https://img.icons8.com/clouds/256/000000/futurama-mom.png",
-    label: "Carol Miller",
-    value: "Carol Miller",
-    description: "One of the richest people on Earth",
-  },
-  {
-    image: "https://img.icons8.com/clouds/256/000000/homer-simpson.png",
-    label: "Homer Simpson",
-    value: "Homer Simpson",
-    description: "Overweight, lazy, and often ignorant",
-  },
-  {
-    image: "https://img.icons8.com/clouds/256/000000/spongebob-squarepants.png",
-    label: "Spongebob Squarepants",
-    value: "Spongebob Squarepants",
-    description: "Not just a sponge",
-  },
-];
+import { partyData, cuttingTypeData } from "../../utils/dummydata";
+import { tblHomeColumns } from "../../utils";
+import { IconPencil, IconTrash } from "@tabler/icons";
+import { getUniqueId } from "../../helpers";
 
-// eslint-disable-next-line react/display-name
-const SelectPartyItem = forwardRef(
-  ({ image, label, description, ...others }, ref) => (
-    <div ref={ref} {...others}>
-      <Group noWrap>
-        <Avatar src={image} />
+const SelectPartyItem = forwardRef(({ label, ...others }, ref) => (
+  <div ref={ref} {...others}>
+    <Text size="sm">{label}</Text>
+  </div>
+));
 
-        <div>
-          <Text size="sm">{label}</Text>
-          <Text size="xs" color="dimmed">
-            {description}
-          </Text>
-        </div>
-      </Group>
-    </div>
-  )
-);
-
-// eslint-disable-next-line react/display-name
-const SelectCuttingItem = forwardRef(
-  ({ image, label, description, ...others }, ref) => (
-    <div ref={ref} {...others}>
-      <Group noWrap>
-        <Avatar src={image} />
-
-        <div>
-          <Text size="sm">{label}</Text>
-          <Text size="xs" color="dimmed">
-            {description}
-          </Text>
-        </div>
-      </Group>
-    </div>
-  )
-);
+const SelectCuttingItem = forwardRef(({ label, ...others }, ref) => (
+  <div ref={ref} {...others}>
+    <Text size="sm">{label}</Text>
+  </div>
+));
 
 const Home = () => {
+  const { classes } = useStyles();
+  const isMobile = useMediaQuery("(max-width: 755px)");
+
+  const [loading, setLoading] = useState(false);
+  const [isUpdateId, setIsUpdateId] = useState(false);
+  const [tblData, setTblData] = useState([]);
+
+  useEffect(() => {
+    // const fetchData = () => {
+    //   setLoading(true);
+    //   setTblData([]);
+    //   setLoading(false);
+    // };
+    // fetchData();
+  }, []);
+
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
-      partyName: "",
-      l_cuttingtype: "",
-      price: 0,
-      dimonds: 0,
-      weight: 0.0,
+      partyid: "",
+      l_cuttingtype_id: "",
+      l_entrydate: new Date(),
+      l_price: 0,
+      l_numofdimonds: 0,
+      l_weight: 0.0,
+      l_multiwithdiamonds: false,
     },
 
     validate: {
-      partyName: (val) =>
-        !val || (val && val.length <= 0) ? "partyName is Required" : null,
-      l_cuttingtype: (val) =>
-        !val || (val && val.length <= 0) ? "l_cuttingtype is Required" : null,
-      price: (val) =>
-        !val || (val && val.length <= 0) ? "price is Required" : null,
-      dimonds: (val) =>
-        !val || (val && val.length <= 0) ? "dimonds is Required" : null,
-      weight: (val) =>
-        !val || (val && val.length <= 0) ? "weight is Required" : null,
+      partyid: (val) => (!val || (val && val.length <= 0) ? true : null),
+      l_cuttingtype_id: (val) =>
+        !val || (val && val.length <= 0) ? true : null,
+      l_entrydate: (val) => (!val || (val && val.length <= 0) ? true : null),
+      l_numofdimonds: (val) => (!val || (val && val.length <= 0) ? true : null),
+      l_weight: (val) => (!val || (val && val.length <= 0) ? true : null),
     },
+  });
+
+  const handleSubmit = (values) => {
+    setLoading(true);
+
+    if (values.partyid) {
+      values.party = partyData.find((d) => d.id == values.partyid);
+      values.partyName = values.party.p_name;
+    }
+
+    if (values.l_cuttingtype_id) {
+      values.l_cuttingtype = cuttingTypeData.find(
+        (d) => d.c_id == values.l_cuttingtype_id
+      );
+      values.cuttingName = values.l_cuttingtype.c_name;
+    }
+
+    if (!isUpdateId) {
+      values.id = getUniqueId();
+      setTblData([...tblData, values]);
+    } else {
+      const findIndex = tblData.findIndex((d) => d.id == isUpdateId);
+      values.id = isUpdateId;
+      tblData[findIndex] = values;
+      setTblData([...tblData]);
+      resetUpdateForm();
+    }
+    setLoading(false);
+  };
+
+  const handleEditRow = (type, values) => {
+    if (type == "edit") {
+      const valueObj = {
+        partyid: values.partyid,
+        l_cuttingtype_id: values.l_cuttingtype_id,
+        l_entrydate: values.l_entrydate,
+        l_price: values.l_price,
+        l_numofdimonds: values.l_numofdimonds,
+        l_weight: values.l_weight,
+        l_multiwithdiamonds: values.l_multiwithdiamonds,
+      };
+
+      form.setValues(valueObj);
+      setIsUpdateId(values.id);
+    }
+
+    if (type == "remove") {
+      const data = tblData.filter((d) => d.id != values.id);
+      setTblData([...data]);
+    }
+  };
+
+  const resetUpdateForm = () => {
+    form.reset();
+    setIsUpdateId(null);
+  };
+
+  const tblColumns = [
+    ...tblHomeColumns,
+    {
+      accessorKey: "Operations",
+      size: 100,
+      cell: (cell) => {
+        return (
+          <>
+            <IconPencil
+              onClick={() => {
+                handleEditRow("edit", cell.row.original);
+              }}
+            />
+            <IconTrash
+              onClick={() => {
+                handleEditRow("remove", cell.row.original);
+              }}
+            />
+          </>
+        );
+      },
+    },
+  ];
+
+  const filterPartyData = partyData.filter((d) => {
+    d.label = d.p_name;
+    d.value = d.id;
+    return d;
+  });
+
+  const filterCuttingTypeData = cuttingTypeData.filter((d) => {
+    d.label = d.c_name;
+    d.value = d.c_id;
+    return d;
   });
 
   return (
     <>
       <HeaderCT />
-      <form
-        onSubmit={form.onSubmit((values) => {
-          console.log("calledd", values);
-        })}
-      >
-        <Grid mx={5} grow>
-          <Grid.Col md={6} lg={2}>
-            <Button>
+      <div className={classes.innerLayout}>
+        <form
+          onSubmit={form.onSubmit((values) => {
+            handleSubmit(values);
+          })}
+        >
+          <Grid mx={15} justify="flex-end">
+            <Button
+              className={classes.redBtnStyle}
+              onClick={() => {
+                resetUpdateForm();
+              }}
+              mr="xs"
+            >
+              Reset
+            </Button>
+            <Button
+              className={classes.redBtnStyle}
+              onClick={() => {
+                console.log("upload to server");
+              }}
+            >
               Save
             </Button>
-          </Grid.Col>
-        </Grid>
-        <Grid mx={5} grow>
-          <Grid.Col md={6} lg={4}>
-            <Select
-              {...form.getInputProps("partyName")}
-              label="Party Name"
-              placeholder="Select Party Name"
-              itemComponent={SelectPartyItem}
-              data={data}
-              searchable
-              clearable
-              maxDropdownHeight={280}
-              nothingFound="Nobody here"
-              onChange={(value) => {
-                console.log("item : ", value);
-                form.setFieldValue("partyName", value);
-              }}
-              filter={(value, item) =>
-                item.label.toLowerCase().includes(value.toLowerCase().trim()) ||
-                item.description
-                  .toLowerCase()
-                  .includes(value.toLowerCase().trim())
-              }
-            />
-          </Grid.Col>
-          <Grid.Col md={6} lg={4}>
-            <Select
-              {...form.getInputProps("l_cuttingtype")}
-              label="Cutting Type"
-              placeholder="Select Cutting Type"
-              itemComponent={SelectCuttingItem}
-              data={data}
-              searchable
-              clearable
-              maxDropdownHeight={280}
-              nothingFound="Nobody here"
-              onChange={(value) => form.setFieldValue("l_cuttingtype", value)}
-              filter={(value, item) =>
-                item.label.toLowerCase().includes(value.toLowerCase().trim()) ||
-                item.description
-                  .toLowerCase()
-                  .includes(value.toLowerCase().trim())
-              }
-            />
-          </Grid.Col>
-          <Grid.Col md={6} lg={4}>
-            <NumberInput
-              label="Price"
-              placeholder="0.0"
-              value={form.values.price}
-              onChange={(value) => form.setFieldValue("price", value)}
-              error={form.errors.price && form.errors.price}
-            />
-          </Grid.Col>
-          <Grid.Col md={6} lg={2}>
-            <NumberInput
-              label="Payment Option"
-              placeholder="0.0"
-              value={form.values.price}
-              onChange={(value) => form.setFieldValue("price", value)}
-              error={form.errors.price && form.errors.price}
-            />
-          </Grid.Col>
-          <Grid.Col md={6} lg={2}>
-            <NumberInput
-              label="Date"
-              placeholder="0.0"
-              value={form.values.price}
-              onChange={(value) => form.setFieldValue("price", value)}
-              error={form.errors.price && form.errors.price}
-            />
-          </Grid.Col>
-          <Grid.Col md={6} lg={2}>
-            <NumberInput
-              label="Dimond Count"
-              placeholder="0"
-              value={form.values.dimonds}
-              onChange={(value) => form.setFieldValue("dimonds", value)}
-              error={form.errors.dimonds && form.errors.dimonds}
-            />
-          </Grid.Col>
-          <Grid.Col md={6} lg={2}>
-            <NumberInput
-              label="Weight"
-              placeholder="0.0"
-              value={form.values.weight}
-              onChange={(value) => form.setFieldValue("weight", value)}
-              error={form.errors.weight && form.errors.weight}
-            />
-          </Grid.Col>
-          <Grid.Col md={6} lg={2}>
-            <Button fullWidth type="submit">
-              Settings
-            </Button>
-          </Grid.Col>
-        </Grid>
-      </form>
+          </Grid>
+          <Grid mx={5} grow>
+            <Grid.Col md={6} lg={4}>
+              <Select
+                {...form.getInputProps("partyid")}
+                label="Party Name"
+                placeholder="Select Party Name"
+                itemComponent={SelectPartyItem}
+                data={filterPartyData}
+                searchable
+                clearable
+                maxDropdownHeight={280}
+                nothingFound="Nobody here"
+                onChange={(key) => {
+                  form.setFieldValue("partyid", key);
+                }}
+                filter={(value, item) =>
+                  item.label
+                    .toLowerCase()
+                    .includes(value && value.toLowerCase().trim())
+                }
+                withAsterisk
+              />
+            </Grid.Col>
+            <Grid.Col md={6} lg={4}>
+              <Select
+                {...form.getInputProps("l_cuttingtype_id")}
+                label="Cutting Type"
+                placeholder="Select Cutting Type"
+                itemComponent={SelectCuttingItem}
+                data={filterCuttingTypeData}
+                searchable
+                clearable
+                maxDropdownHeight={280}
+                nothingFound="Nobody here"
+                onChange={(key) => {
+                  form.setFieldValue("l_cuttingtype_id", key);
+                  const cutType = cuttingTypeData.find((d) => d.c_id == key);
+                  form.setFieldValue("l_price", parseFloat(cutType.c_price));
+                  form.setFieldValue(
+                    "l_multiwithdiamonds",
+                    cutType.c_multiwithdiamonds
+                  );
+                }}
+                filter={(value, item) =>
+                  item.label.toLowerCase().includes(value.toLowerCase().trim())
+                }
+                withAsterisk
+              />
+            </Grid.Col>
+            <Grid.Col md={6} lg={4}>
+              <NumberInput
+                disabled
+                label="Price"
+                placeholder="0.0"
+                value={form.values.l_price}
+                // onChange={(value) => form.setFieldValue("l_price", value)}
+                // error={form.errors.l_price && form.errors.l_price}
+                withAsterisk
+              />
+            </Grid.Col>
+            <Grid.Col md={6} lg={2}>
+              <Text weight={500}> Payment Option </Text>
+              <UnstyledButton className={classes.ckBoxBen}>
+                <Checkbox
+                  disabled
+                  {...form.getInputProps("l_multiwithdiamonds", {
+                    type: "checkbox",
+                  })}
+                  label="Payment With Dimond"
+                />
+              </UnstyledButton>
+            </Grid.Col>
+            <Grid.Col md={6} lg={2}>
+              <DatePicker
+                dropdownType={isMobile ? "modal" : "popover"}
+                {...form.getInputProps("l_entrydate")}
+                placeholder="Pick date"
+                label="Date"
+                inputFormat="DD/MM/YYYY"
+                labelFormat="DD/MM/YYYY"
+                renderDay={(date) => {
+                  const day = date.getDate();
+                  return (
+                    <Indicator
+                      size={6}
+                      color="red"
+                      offset={8}
+                      disabled={day !== new Date().getDate()}
+                    >
+                      <div>{day}</div>
+                    </Indicator>
+                  );
+                }}
+                withAsterisk
+              />
+            </Grid.Col>
+            <Grid.Col md={6} lg={2}>
+              <NumberInput
+                label="Dimond Count"
+                placeholder="0"
+                value={form.values.l_numofdimonds}
+                onChange={(value) =>
+                  form.setFieldValue("l_numofdimonds", value)
+                }
+                error={form.errors.l_numofdimonds && form.errors.l_numofdimonds}
+                withAsterisk
+              />
+            </Grid.Col>
+            <Grid.Col md={6} lg={2}>
+              <NumberInput
+                precision={2}
+                label="Weight"
+                placeholder="0.0"
+                value={form.values.l_weight}
+                onChange={(value) => form.setFieldValue("l_weight", value)}
+                error={form.errors.l_weight && form.errors.l_weight}
+                withAsterisk
+              />
+            </Grid.Col>
+            <Grid.Col md={6} lg={2} className={classes.addBtn}>
+              <Button fullWidth type="submit" className={classes.redBtnStyle}>
+                {isUpdateId ? "Update" : "Add"}
+              </Button>
+            </Grid.Col>
+          </Grid>
+        </form>
+      </div>
+      <MantineGridTable
+        data={tblData}
+        loading={loading}
+        handleEditRow={handleEditRow}
+        tableCoumns={tblColumns}
+      />
     </>
   );
 };
