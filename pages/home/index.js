@@ -11,6 +11,8 @@ import {
   Checkbox,
   UnstyledButton,
   Indicator,
+  Group,
+  ActionIcon,
   // FocusTrap,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -22,7 +24,7 @@ import { HeaderCT, MantineGridTable } from "../../components";
 
 import { partyData, cuttingTypeData } from "../../utils/dummydata";
 import { tblHomeColumns } from "../../utils";
-import { getUniqueId } from "../../helpers";
+import { getUniqueId, openDeleteModal } from "../../helpers";
 
 const SelectPartyItem = forwardRef(({ label, ...others }, ref) => (
   <div ref={ref} {...others}>
@@ -138,18 +140,36 @@ const Home = () => {
       size: 100,
       cell: (cell) => {
         return (
-          <>
-            <IconPencil
+          // <>
+          //   <IconPencil
+          //     onClick={() => {
+          //       handleEditRow("edit", cell.row.original);
+          //     }}
+          //   />
+          //   <IconTrash
+          //     onClick={() => {
+          //       handleEditRow("remove", cell.row.original);
+          //     }}
+          //   />
+          // </>
+          <Group spacing={0} position="center">
+            <ActionIcon
               onClick={() => {
                 handleEditRow("edit", cell.row.original);
               }}
-            />
-            <IconTrash
+            >
+              <IconPencil size={16} stroke={1.5} />
+            </ActionIcon>
+            <ActionIcon
+              color="red"
               onClick={() => {
-                handleEditRow("remove", cell.row.original);
+                // handleEditRow("remove", cell.row.original);
+                openDeleteModal("home", handleEditRow, "remove", cell.row.original);
               }}
-            />
-          </>
+            >
+              <IconTrash size={16} stroke={1.5} />
+            </ActionIcon>
+          </Group>
         );
       },
     },

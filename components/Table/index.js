@@ -7,6 +7,7 @@ import {
   Text,
   Center,
   TextInput,
+  ActionIcon,
 } from "@mantine/core";
 import { keys } from "@mantine/utils";
 import { useMediaQuery } from "@mantine/hooks";
@@ -175,10 +176,19 @@ export const SimpleTable = ({ data, tblObj }) => {
         })}
         {showOperations && (
           <td className={classes.centerText}>
-            <div className={classes.flexCenter}>
-              <IconPencil onClick={() => alert("Helo")} />
-              <IconTrash color="red" onClick={() => alert("Helo")} />
-            </div>
+            <Group spacing={0} position="center">
+              <ActionIcon onClick={() => alert("Helo")}>
+                <IconPencil size={16} stroke={1.5} />
+              </ActionIcon>
+              <ActionIcon
+                color="red"
+                onClick={() => {
+                  alert("Helo");
+                }}
+              >
+                <IconTrash size={16} stroke={1.5} />
+              </ActionIcon>
+            </Group>
           </td>
         )}
       </tr>
@@ -202,6 +212,8 @@ export const SimpleTable = ({ data, tblObj }) => {
       />
       <ScrollArea>
         <Table
+          striped
+          highlightOnHover
           horizontalSpacing="md"
           verticalSpacing="xs"
           sx={{ tableLayout: "fixed", minWidth: 365 }}

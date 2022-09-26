@@ -1,21 +1,16 @@
 import { createStyles } from "@mantine/core";
 const useStyles = createStyles((theme) => ({
-  innerLayout: {
-    margin: "1rem",
-    marginTop: "5rem",
-    marginBottom: "2rem",
-  },
   m: {
     margin: "1rem",
   },
-  "m-xs": {
-    margin: "1.5rem",
-  },
-  "m-sm": {
-    margin: "3rem",
-  },
-  "m-md": {
-    margin: "5rem",
+  ckBoxBen: {
+    disabled: true,
+    borderRadius: theme.radius.sm,
+    padding: "7px",
+    border: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[8] : "#ced4da"
+    }`,
+    width: "100%",
   },
   redBtnStyle: {
     "&:hover": {
