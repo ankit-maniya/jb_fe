@@ -16,31 +16,31 @@ function genFakerData(_, i) {
 export const dummyData = new Array(20).fill({}).map(genFakerData);
 export const loatsData = [
   {
-    "id": 46901,
-    "partyid": {
-        "id": 11,
-        "p_name": "JILBHAI KHOPALA",
-        "p_mobile": "8849465886"
+    id: 46901,
+    partyid: {
+      id: 11,
+      p_name: "JILBHAI KHOPALA",
+      p_mobile: "8849465886",
     },
-    "userid": {
-        "id": 7,
-        "u_name": "jay bhagavati laser",
-        "u_email": "jaybhagavati@gmail.com"
+    userid: {
+      id: 7,
+      u_name: "jay bhagavati laser",
+      u_email: "jaybhagavati@gmail.com",
     },
-    "l_cuttingtype": "LS",
-    "l_entrydate": "2022-05-02",
-    "l_price": "18.00",
-    "l_weight": "28.32",
-    "l_month": 5,
-    "l_year": 2022,
-    "l_numofdimonds": 100,
-    "l_multiwithdiamonds": false,
-    "isactive": true,
-    "isdelete": false,
-    "createdat": "2022-05-29T13:10:11Z",
-    "updatedat": "2022-09-17T13:46:35.166156Z"
-},
-]
+    l_cuttingtype: "LS",
+    l_entrydate: "2022-05-02",
+    l_price: "18.00",
+    l_weight: "28.32",
+    l_month: 5,
+    l_year: 2022,
+    l_numofdimonds: 100,
+    l_multiwithdiamonds: false,
+    isactive: true,
+    isdelete: false,
+    createdat: "2022-05-29T13:10:11Z",
+    updatedat: "2022-09-17T13:46:35.166156Z",
+  },
+];
 export const cuttingTypeData = [
   {
     c_id: 2,
@@ -505,5 +505,88 @@ export const partyData = [
     updatedat: "2021-05-02T12:04:16Z",
     old_userid: "605789a6254f1c2d3e838cd5",
     objid: "607d11073544d300151191e2",
+  },
+];
+
+export const partysArray = [
+  {
+    name: "Athena Weissnat",
+    company: "Little - Rippin",
+    email: "Elouise.Prohaska@yahoo.com",
+  },
+  {
+    name: "Deangelo Runolfsson",
+    company: "Greenfelder - Krajcik",
+    email: "Kadin_Trantow87@yahoo.com",
+  },
+  {
+    name: "Danny Carter",
+    company: "Kohler and Sons",
+    email: "Marina3@hotmail.com",
+  },
+  {
+    name: "Trace Tremblay PhD",
+    company: "Crona, Aufderhar and Senger",
+    email: "Antonina.Pouros@yahoo.com",
+  },
+  {
+    name: "Derek Dibbert",
+    company: "Gottlieb LLC",
+    email: "Abagail29@hotmail.com",
+  },
+  {
+    name: "Viola Bernhard",
+    company: "Funk, Rohan and Kreiger",
+    email: "Jamie23@hotmail.com",
+  },
+  {
+    name: "Austin Jacobi",
+    company: "Botsford - Corwin",
+    email: "Genesis42@yahoo.com",
+  },
+  {
+    name: "Hershel Mosciski",
+    company: "Okuneva, Farrell and Kilback",
+    email: "Idella.Stehr28@yahoo.com",
+  },
+  {
+    name: "Mylene Ebert",
+    company: "Kirlin and Sons",
+    email: "Hildegard17@hotmail.com",
+  },
+  {
+    name: "Lou Trantow",
+    company: "Parisian - Lemke",
+    email: "Hillard.Barrows1@hotmail.com",
+  },
+  {
+    name: "Dariana Weimann",
+    company: "Schowalter - Donnelly",
+    email: "Colleen80@gmail.com",
+  },
+  {
+    name: "Dr. Christy Herman",
+    company: "VonRueden - Labadie",
+    email: "Lilyan98@gmail.com",
+  },
+  {
+    name: "Katelin Schuster",
+    company: "Jacobson - Smitham",
+    email: "Erich_Brekke76@gmail.com",
+  },
+  {
+    name: "Melyna Macejkovic",
+    company: "Schuster LLC",
+    email: "Kylee4@yahoo.com",
+  },
+  {
+    name: "Pinkie Rice",
+    company: "Wolf, Trantow and Zulauf",
+    email: "Fiona.Kutch@hotmail.com",
+  },
+  {
+    name: "Brain Kreiger",
+    company: "Lueilwitz Group",
+    email: "Rico98@hotmail.com",
   },
 ];

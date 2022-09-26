@@ -10,6 +10,8 @@ import {
   IconDashboard,
   IconLogout,
   IconHome,
+  IconList,
+  IconPencilPlus,
 } from "@tabler/icons";
 
 export const menuData = [
@@ -26,7 +28,16 @@ export const menuData = [
   },
   { label: "Balance Sheet", icon: IconWallet, pagelink: "/balance_sheets" },
   { label: "Average", icon: IconPercentage, pagelink: "/averages" },
-  { label: "Party", icon: IconUsers, pagelink: "/partys" },
+  {
+    label: "Party",
+    icon: IconUsers,
+    // pagelink: "/partys",
+    initiallyOpened: false,
+    links: [
+      { label: "Partys", pagelink: "/partys" },
+      { label: "Add Party", pagelink: "/partys/add_party" },
+    ],
+  },
   { label: "Cutting Types", icon: IconChecklist, pagelink: "/cutting_types" },
   {
     label: "Party Wise Details",

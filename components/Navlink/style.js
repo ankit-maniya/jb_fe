@@ -18,6 +18,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   link: {
+    cursor: "pointer",
     fontWeight: 500,
     display: "block",
     textDecoration: "none",
