@@ -57,7 +57,7 @@ export const CuttingTypeModal = ({
       onClose={() => {
         resetUpdateForm();
       }}
-      title="Add Cutting type"
+      title={`${isUpdateObj ? "Update" : "Add"} Cutting type`}
     >
       <form
         onSubmit={form.onSubmit((values) => {

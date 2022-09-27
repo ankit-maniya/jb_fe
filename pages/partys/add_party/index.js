@@ -17,7 +17,7 @@ import {
   HeaderCT,
   ReactToast,
 } from "../../../components";
-import { partyData } from "../../../utils/dummydata";
+import { cuttingTypeData, partyData } from "../../../utils/dummydata";
 import useStyles from "./style";
 
 const AddParty = ({ updateId }) => {
@@ -26,7 +26,6 @@ const AddParty = ({ updateId }) => {
   const [openModel, setModelOpen] = useState(false);
   const [cuttypeData, setCuttypeData] = useState([]);
   const [isCTUpdateObj, setIsCTUpdateObj] = useState(null);
-  // const [isPTUpdateObj, setPTUpdateObj] = useState(null);
   const { classes } = useStyles();
 
   const upCuttypeArr = cuttypeData.filter((d, idx) => (d.id = idx + 1));
@@ -60,6 +59,11 @@ const AddParty = ({ updateId }) => {
         return;
       }
 
+      const cuttingType = cuttingTypeData.filter(
+        (ct) => ct.partyid == updatePartyId
+      );
+
+      setCuttypeData(cuttingType);
       if (party.p_mobile) {
         party.p_mobile = parseInt(party.p_mobile);
       }
@@ -69,8 +73,9 @@ const AddParty = ({ updateId }) => {
   }, [updatePartyId]);
 
   const resetPartyForm = () => {
+    if (updatePartyId) return;
+
     form.reset();
-    // setPTUpdateObj(null);
     setCuttypeData([]);
   };
 
@@ -99,9 +104,10 @@ const AddParty = ({ updateId }) => {
   };
 
   const handlePartySubmit = (values) => {
+    console.log("isUpdateParty with Cuttingtype", updatePartyId);
     console.log("cuttypeData :: ", cuttypeData);
     console.log("party :: ", values);
-    ReactToast("success", "Party added!");
+    ReactToast("success", "Party " + (updatePartyId ? "updated!" : "added!"));
     resetPartyForm();
   };
 
@@ -124,14 +130,8 @@ const AddParty = ({ updateId }) => {
             >
               Reset
             </Button>
-            <Button
-              type="submit"
-              className={classes.redBtnStyle}
-              onClick={() => {
-                console.log("upload to server");
-              }}
-            >
-              Add Party
+            <Button type="submit" className={classes.redBtnStyle}>
+              {updatePartyId ? "Update" : "Add"} Party
             </Button>
           </Grid>
           <Grid mx={0} grow>
@@ -191,7 +191,6 @@ const AddParty = ({ updateId }) => {
 
       {/* Display Cutting Type Modal */}
       <CuttingTypeModal
-        updateId={null}
         openModel={openModel}
         isUpdateObj={isCTUpdateObj}
         setIsUpdateObj={setIsCTUpdateObj}
