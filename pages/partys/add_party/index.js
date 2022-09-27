@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useRouter } from "next/router";
 import {
   Button,
   Divider,
@@ -8,17 +10,19 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCirclePlus } from "@tabler/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CuttingTypeModal,
   CuttingTypeTable,
   HeaderCT,
   ReactToast,
 } from "../../../components";
+import { partyData } from "../../../utils/dummydata";
 import useStyles from "./style";
 
-const AddParty = (props) => {
-  // const updatePartyId = props.updateId;
+const AddParty = ({ updateId }) => {
+  const router = useRouter();
+  const updatePartyId = updateId;
   const [openModel, setModelOpen] = useState(false);
   const [cuttypeData, setCuttypeData] = useState([]);
   const [isCTUpdateObj, setIsCTUpdateObj] = useState(null);
@@ -47,10 +51,27 @@ const AddParty = (props) => {
     },
   });
 
+  useEffect(() => {
+    if (updatePartyId) {
+      const party = partyData.find((d) => d.id == updatePartyId);
+
+      if (!party) {
+        router.push("/error");
+        return;
+      }
+
+      if (party.p_mobile) {
+        party.p_mobile = parseInt(party.p_mobile);
+      }
+
+      form.setValues(party);
+    }
+  }, [updatePartyId]);
+
   const resetPartyForm = () => {
     form.reset();
     // setPTUpdateObj(null);
-    setCuttypeData([])
+    setCuttypeData([]);
   };
 
   const handleLoatTypeSubmit = (values) => {

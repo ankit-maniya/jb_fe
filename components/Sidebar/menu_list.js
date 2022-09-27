@@ -21,6 +21,7 @@ export const menuData = [
     label: "Invoice",
     icon: IconFileInvoice,
     initiallyOpened: false,
+    child: ["/invoices", "/invoices/party_invoices"],
     links: [
       { label: "All Invoices", pagelink: "/invoices" },
       { label: "party invoices", pagelink: "/invoices/party_invoices" },
@@ -32,6 +33,7 @@ export const menuData = [
     label: "Party",
     icon: IconUsers,
     // pagelink: "/partys",
+    child: ["/partys", "/partys/add_party"],
     initiallyOpened: false,
     links: [
       { label: "Partys", pagelink: "/partys" },
@@ -49,6 +51,7 @@ export const menuData = [
     label: "Dustbin",
     icon: IconTrash,
     initiallyOpened: false,
+    child: ["/dustbin/dt_partys", "/dustbin/dt_cutting_types"],
     links: [
       { label: "Party", pagelink: "/dustbin/dt_partys" },
       { label: "Cutting Type", pagelink: "/dustbin/dt_cutting_types" },

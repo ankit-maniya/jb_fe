@@ -3,7 +3,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { MantineLogo } from "@mantine/ds";
 import { DrawerCT } from "../Drawer";
 import { SidebarCT } from "../Sidebar";
-import useStyles from './style'
+import useStyles from "./style";
 
 export const HeaderCT = () => {
   const [opened, { toggle }] = useDisclosure(false);
@@ -19,7 +19,7 @@ export const HeaderCT = () => {
           </Group>
         </div>
       </Header>
-      <DrawerCT opened={opened} setOpened={toggle} sidebar={<SidebarCT />}/>
+      <DrawerCT opened={opened} setOpened={toggle} sidebar={<SidebarCT />} />
     </>
   );
 };

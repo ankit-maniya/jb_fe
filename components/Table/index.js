@@ -22,6 +22,7 @@ import {
 } from "@tabler/icons";
 
 import useStyles from "./style";
+import Link from "next/link";
 
 const Th = ({
   key,
@@ -177,9 +178,16 @@ export const SimpleTable = ({ data, tblObj }) => {
         {showOperations && (
           <td className={classes.centerText}>
             <Group spacing={0} position="center">
-              <ActionIcon onClick={() => alert("Helo")}>
-                <IconPencil size={16} stroke={1.5} />
-              </ActionIcon>
+              <Link
+                href={{
+                  pathname: "/partys/add_party/[partyid]",
+                  query: { partyid: row.id },
+                }}
+              >
+                <ActionIcon>
+                  <IconPencil size={16} stroke={1.5} />
+                </ActionIcon>
+              </Link>
               <ActionIcon
                 color="red"
                 onClick={() => {

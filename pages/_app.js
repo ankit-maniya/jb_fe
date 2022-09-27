@@ -7,12 +7,16 @@ import { ModalsProvider } from "@mantine/modals";
 
 import React from "react";
 import App from "next/app";
+// import NextNProgress from "nextjs-progressbar";
+import { RouterTransition } from "../components";
 
 class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
     return (
-      <MantineProvider>
+      <MantineProvider withGlobalStyles withNormalizeCSS>
+        <RouterTransition />
+        {/* <NextNProgress /> */}
         <ModalsProvider>
           <Component {...pageProps} />
           <ToastContainer />

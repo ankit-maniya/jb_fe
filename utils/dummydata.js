@@ -160,7 +160,7 @@ export const cuttingTypeData = [
 
 export const partyData = [
   {
-    id: 93,
+    id: 1,
     userid: {
       id: 7,
       u_name: "jay bhagavati laser",
@@ -179,7 +179,7 @@ export const partyData = [
     old_userid: "605789a6254f1c2d3e838cd5",
     objid: "60dd91831748f000157f1651",
     label: "A MANDAVA",
-    value: 93,
+    value: 1,
   },
   {
     id: 194,
