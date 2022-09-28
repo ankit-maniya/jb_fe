@@ -52,7 +52,13 @@ export const CuttingTypeTable = ({ data, handleEditCutType }) => {
             <ActionIcon
               color="red"
               onClick={() => {
-                openDeleteModal("cuttingtype", handleEditCutType, null, item);
+                openDeleteModal({
+                  from: "cuttingtype",
+                  fn: handleEditCutType,
+                  type: null,
+                  item: item,
+                });
+                // openDeleteModal({"cuttingtype", handleEditCutType, null, item});
               }}
             >
               <IconTrash size={16} stroke={1.5} />

@@ -163,12 +163,18 @@ const Home = () => {
             <ActionIcon
               color="red"
               onClick={() => {
-                openDeleteModal(
-                  "loat",
-                  handleEditRow,
-                  "remove",
-                  cell.row.original
-                );
+                // openDeleteModal(
+                //   "loat",
+                //   handleEditRow,
+                //   "remove",
+                //   cell.row.original
+                // );
+                openDeleteModal({
+                  from: "loat",
+                  fn: handleEditRow,
+                  type: "remove",
+                  item: cell.row.original,
+                });
               }}
             >
               <IconTrash size={16} stroke={1.5} />

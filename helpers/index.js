@@ -6,14 +6,24 @@ export const getUniqueId = () => {
   return Math.floor(Math.random() * Math.floor(Math.random() * Date.now()));
 };
 
-export const openDeleteModal = (from, fn, type, item) =>
+const defaultActions = {
+  labels: { confirm: "Delete", cancel: "No" },
+  title: "Delete",
+  msg: "Are you sure you want to delete!",
+};
+
+export const openDeleteModal = ({
+  from,
+  fn,
+  type,
+  item,
+  action = defaultActions,
+}) =>
   openConfirmModal({
-    title: "Delete Cutting Type",
+    title: action.title,
     centered: true,
-    children: (
-      <Text size="sm">Are you sure you want to delete cutting type!</Text>
-    ),
-    labels: { confirm: "Delete Cutting Type", cancel: "No don't delete it" },
+    children: <Text size="sm">{action.msg}</Text>,
+    labels: action.labels,
     confirmProps: { color: "red" },
     // onCancel: () => console.log("dont delete!"),
     onConfirm: () => {
@@ -21,6 +31,8 @@ export const openDeleteModal = (from, fn, type, item) =>
         fn(type, item);
       } else if (from == "cuttingtype") {
         fn(true, item);
+      } else if (from == "multiDeleteLoats") {
+        fn();
       }
       ReactToast("success", "Deleted Successfully  !");
     },

@@ -8,8 +8,9 @@ const useStyles = createStyles((theme) => ({
     borderRadius: theme.radius.sm,
     padding: "7px",
     border: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[8] : "#ced4da"
+      theme.colorScheme === "dark" ? theme.colors.gray[8] : "#ced4da"
     }`,
+    backgroundColor: theme.colorScheme === "dark" ? "#25262b" : "white",
     width: "100%",
   },
   redBtnStyle: {

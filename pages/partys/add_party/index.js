@@ -113,7 +113,7 @@ const AddParty = ({ updateId }) => {
 
   return (
     <>
-      <HeaderCT title="Add Party"/>
+      <HeaderCT title={`${updatePartyId ? "Update" : "Add"} Party`} />
       <div className={classes.innerLayout}>
         <form
           onSubmit={form.onSubmit((values) => {
@@ -121,15 +121,17 @@ const AddParty = ({ updateId }) => {
           })}
         >
           <Grid mx={10} justify="flex-end">
-            <Button
-              className={classes.redBtnStyle}
-              onClick={() => {
-                resetPartyForm();
-              }}
-              mr="xs"
-            >
-              Reset
-            </Button>
+            {!updatePartyId && (
+              <Button
+                className={classes.redBtnStyle}
+                onClick={() => {
+                  resetPartyForm();
+                }}
+                mr="xs"
+              >
+                Reset
+              </Button>
+            )}
             <Button type="submit" className={classes.redBtnStyle}>
               {updatePartyId ? "Update" : "Add"} Party
             </Button>

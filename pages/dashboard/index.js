@@ -1,5 +1,6 @@
 import { ActionIcon, Button, Grid, Group } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons";
+import keys from "lodash/keys";
 import isEmpty from "lodash/isEmpty";
 import { useState } from "react";
 import { HeaderCT, LoatEditModal, MantineGridTable } from "../../components";
@@ -37,6 +38,15 @@ const Dashboard = () => {
       const data = loatsData.filter((d) => d.id != values.id);
       setLoatsData([...data]);
     }
+  };
+
+  const handleMultiDelete = () => {
+    const data = loatsData.filter(
+      (d, idx) => !keys(selectRow).includes(`${idx}`)
+    );
+
+    setLoatsData([...data]);
+    setSelectedRow({});
   };
 
   const handleLoatTypeSubmit = (values) => {
@@ -82,12 +92,18 @@ const Dashboard = () => {
             <ActionIcon
               color="red"
               onClick={() => {
-                openDeleteModal(
-                  "loat",
-                  handleEditRow,
-                  "remove",
-                  cell.row.original
-                );
+                // openDeleteModal(
+                //   "loat",
+                //   handleEditRow,
+                //   "remove",
+                //   cell.row.original
+                // );
+                openDeleteModal({
+                  from: "loat",
+                  fn: handleEditRow,
+                  type: "remove",
+                  item: cell.row.original,
+                });
               }}
             >
               <IconTrash size={16} stroke={1.5} />
@@ -122,7 +138,17 @@ const Dashboard = () => {
         component={
           !isEmpty(selectRow) && (
             <Grid mx={10} justify="flex-end">
-              <ActionIcon color="red" variant="light">
+              <ActionIcon
+                color="red"
+                variant="light"
+                onClick={() => {
+                  // openDeleteModal("multiDeleteLoats", handleMultiDelete);
+                  openDeleteModal({
+                    from: "multiDeleteLoats",
+                    fn: handleMultiDelete,
+                  });
+                }}
+              >
                 <IconTrash stroke={1.5} />
               </ActionIcon>
             </Grid>

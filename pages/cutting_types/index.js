@@ -1,7 +1,12 @@
 import { Button, Grid, Text } from "@mantine/core";
 import { IconCirclePlus } from "@tabler/icons";
 import React, { useState } from "react";
-import { CuttingTypeModal, CuttingTypeTable, HeaderCT } from "../../components";
+import {
+  CuttingTypeModal,
+  CuttingTypeTable,
+  HeaderCT,
+  ReactToast,
+} from "../../components";
 import useStyles from "./style";
 
 const CuttingType = (props) => {
@@ -52,7 +57,7 @@ const CuttingType = (props) => {
 
   return (
     <>
-      <HeaderCT title="Cutting Type"/>
+      <HeaderCT title="Cutting Type" />
       <div className={classes.innerLayout}>
         <Grid mx={10} justify="space-between">
           <Text weight={500} size="lg">

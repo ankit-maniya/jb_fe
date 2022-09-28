@@ -16,6 +16,7 @@ import { useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { cuttingTypeData, partyData } from "../../../utils/dummydata";
+import { ReactToast } from "../../Toast";
 import useStyles from "./style";
 
 export const LoatEditModal = ({
@@ -106,7 +107,9 @@ export const LoatEditModal = ({
           <Button
             type="submit"
             className={classes.redBtnStyle}
-            onClick={() => {}}
+            onClick={() => {
+              ReactToast("success", "Loat updated!");
+            }}
             mr="xs"
           >
             Update
