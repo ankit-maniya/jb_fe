@@ -17,7 +17,7 @@ export const openDeleteModal = (from, fn, type, item) =>
     confirmProps: { color: "red" },
     // onCancel: () => console.log("dont delete!"),
     onConfirm: () => {
-      if (from == "home") {
+      if (from == "loat") {
         fn(type, item);
       } else if (from == "cuttingtype") {
         fn(true, item);

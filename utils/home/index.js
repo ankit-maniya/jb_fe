@@ -16,14 +16,18 @@ export const tblHomeColumns = [
       return cell.row.index + 1;
     },
   },
-  {
-    accessorKey: "l_entrydate",
-    header: "Date",
-    filterFn: dateFilterFn,
-    cell: (cell) => {
-      return cell.getValue() && cell.getValue()?.toLocaleDateString("es-CL");
-    },
-  },
+  // {
+  //   accessorKey: "l_entrydate",
+  //   header: "Date",
+  //   filterFn: dateFilterFn,
+  //   cell: (cell) => {
+  //     console.log("cell.getValue() : ", cell.getValue());
+  //     if (typeof cell.getValue() == "string") {
+  //       return cell.getValue();
+  //     }
+  //     return cell.getValue() && cell.getValue()?.toLocaleDateString("es-CL");
+  //   },
+  // },
   {
     accessorKey: "partyName",
     header: "Party name",
@@ -62,5 +66,5 @@ export const tblHomeColumns = [
       return <Badge color="red">Weight</Badge>;
     },
     filterFn: booleanFilterFn,
-  }
+  },
 ];

@@ -17,7 +17,7 @@ const Partys = () => {
 
   return (
     <>
-      <HeaderCT />
+      <HeaderCT title="All Partys"/>
       <div className={classes.innerLayout}>
         <SimpleTable
           data={upPartyArr}

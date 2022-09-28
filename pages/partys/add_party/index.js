@@ -113,7 +113,7 @@ const AddParty = ({ updateId }) => {
 
   return (
     <>
-      <HeaderCT />
+      <HeaderCT title="Add Party"/>
       <div className={classes.innerLayout}>
         <form
           onSubmit={form.onSubmit((values) => {
@@ -176,7 +176,7 @@ const AddParty = ({ updateId }) => {
             leftIcon={<IconCirclePlus size={26} />}
             onClick={() => setModelOpen(true)}
           >
-            Add Loat
+            Add Cuttingtype
           </Button>
         </Grid>
       </div>

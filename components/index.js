@@ -8,3 +8,4 @@ export * from "./CuttingType";
 export * from "./Toast";
 export * from "./Error";
 export * from "./RouterTransition"
+export * from "./Loat"

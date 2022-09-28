@@ -24,6 +24,7 @@
     "@tabler/icons": "^1.100.0",
     "axios": "^0.27.2",
     "dayjs": "^1.11.5",
+    "lodash": "^4.17.21",
     "mantine-data-grid": "^0.0.19",
     "next": "12.3.1",
     "next-redux-wrapper": "^8.0.0",

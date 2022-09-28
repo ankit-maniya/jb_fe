@@ -25,10 +25,12 @@ const CuttingType = (props) => {
       upData[upidx] = { ...values, id: isCTUpdateObj.id };
       setCuttypeData([...upData]);
       setIsCTUpdateObj(null);
+      ReactToast("success", "Cutting Type updated!");
       return;
     }
 
     setCuttypeData([...cuttypeData, values]);
+    ReactToast("success", "Cutting Type Added!");
   };
 
   const handleEditCutType = (isDelete, item) => {
@@ -44,14 +46,13 @@ const CuttingType = (props) => {
 
   const handlePartySubmit = (values) => {
     console.log("cuttypeData :: ", cuttypeData);
-    console.log("party :: ", values);
     ReactToast("success", "Party added!");
     resetPartyForm();
   };
 
   return (
     <>
-      <HeaderCT />
+      <HeaderCT title="Cutting Type"/>
       <div className={classes.innerLayout}>
         <Grid mx={10} justify="space-between">
           <Text weight={500} size="lg">
@@ -62,7 +63,7 @@ const CuttingType = (props) => {
             leftIcon={<IconCirclePlus size={26} />}
             onClick={() => setModelOpen(true)}
           >
-            Add Loat
+            Add Cuttingtype
           </Button>
         </Grid>
         <CuttingTypeTable
@@ -72,7 +73,6 @@ const CuttingType = (props) => {
 
         {/* Display Cutting Type Modal */}
         <CuttingTypeModal
-          updateId={null}
           openModel={openModel}
           isUpdateObj={isCTUpdateObj}
           setIsUpdateObj={setIsCTUpdateObj}

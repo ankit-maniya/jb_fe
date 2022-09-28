@@ -1,14 +1,14 @@
 import { Grid } from "@mantine/core";
-import {
-  DataGrid,
-} from "mantine-data-grid";
+import { DataGrid } from "mantine-data-grid";
 import useStyles from "./style";
 
 export const MantineGridTable = ({
   loading,
   data,
-  handleEditRow,
   tableCoumns,
+  withRowSelection = false,
+  onRowSelectionChange,
+  defaltState,
 }) => {
   const { classes } = useStyles();
 
@@ -28,6 +28,11 @@ export const MantineGridTable = ({
           withColumnResizing={true}
           striped={true}
           highlightOnHover={true}
+          withRowSelection={withRowSelection}
+          state={{
+            rowSelection: defaltState,
+          }}
+          onRowSelectionChange={onRowSelectionChange}
           loading={loading}
           // onRow={(row) => ({
           //   onClick: () => {

@@ -6,7 +6,7 @@ const ErrorPage = () => {
   const { classes } = useStyles()
   return (
     <>
-      <HeaderCT />
+      <HeaderCT title="404"/>
       <div className={classes.innerLayout}>
         <NotFound404 />
       </div>

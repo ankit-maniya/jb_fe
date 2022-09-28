@@ -163,8 +163,12 @@ const Home = () => {
             <ActionIcon
               color="red"
               onClick={() => {
-                // handleEditRow("remove", cell.row.original);
-                openDeleteModal("home", handleEditRow, "remove", cell.row.original);
+                openDeleteModal(
+                  "loat",
+                  handleEditRow,
+                  "remove",
+                  cell.row.original
+                );
               }}
             >
               <IconTrash size={16} stroke={1.5} />
@@ -253,6 +257,9 @@ const Home = () => {
                 nothingFound="Nobody here"
                 onChange={(key) => {
                   form.setFieldValue("l_cuttingtype_id", key);
+
+                  if (!key) return;
+
                   const cutType = cuttingTypeData.find((d) => d.c_id == key);
                   form.setFieldValue("l_price", parseFloat(cutType.c_price));
                   form.setFieldValue(
@@ -269,6 +276,7 @@ const Home = () => {
             <Grid.Col md={6} lg={4}>
               <NumberInput
                 disabled
+                precision={2}
                 label="Price"
                 placeholder="0.0"
                 value={form.values.l_price}
@@ -279,7 +287,7 @@ const Home = () => {
             </Grid.Col>
             <Grid.Col md={6} lg={2}>
               <Text weight={500}> Payment Option </Text>
-              <UnstyledButton className={classes.ckBoxBen}>
+              <UnstyledButton disabled className={classes.ckBoxBen}>
                 <Checkbox
                   disabled
                   {...form.getInputProps("l_multiwithdiamonds", {
@@ -348,7 +356,6 @@ const Home = () => {
       <MantineGridTable
         data={tblData}
         loading={loading}
-        handleEditRow={handleEditRow}
         tableCoumns={tblColumns}
       />
     </>
