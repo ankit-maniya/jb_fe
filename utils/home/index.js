@@ -1,7 +1,6 @@
 import { Badge } from "@mantine/core";
 import {
   booleanFilterFn,
-  dateFilterFn,
   highlightFilterValue,
   numberFilterFn,
   stringFilterFn,

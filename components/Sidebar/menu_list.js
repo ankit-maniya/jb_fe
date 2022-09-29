@@ -46,7 +46,7 @@ export const menuData = [
     icon: IconNotes,
     pagelink: "/loats/party_loats",
   },
-  { label: "Date Wise Details", icon: IconCalendar, pagelink: "/loats" },
+  { label: "Date Wise Details", icon: IconCalendar, pagelink: "/datewise/year" },
   {
     label: "Dustbin",
     icon: IconTrash,

@@ -1,32 +1,32 @@
 import { useState } from "react";
-import { ActionIcon, Grid, Group } from "@mantine/core";
+import { useRouter } from "next/router";
+import { ActionIcon, Button, Grid, Group, Text, Title } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons";
-import { DateRangePicker } from "@mantine/dates";
-import { useMediaQuery } from "@mantine/hooks";
 import keys from "lodash/keys";
 import isEmpty from "lodash/isEmpty";
 
 import useStyles from "./style";
 
-import { HeaderCT, LoatEditModal, MantineGridTable } from "../../components";
+import { HeaderCT, LoatEditModal, MantineGridTable } from "../../../components";
 
-import { cuttingTypeData, loatsArr, partyData } from "../../utils/dummydata";
-import { openDeleteModal } from "../../helpers";
-import { tblHomeColumns } from "../../utils";
+import { cuttingTypeData, loatsArr, partyData } from "../../../utils/dummydata";
+import { openDeleteModal } from "../../../helpers";
+import { tblHomeColumns } from "../../../utils";
+import Link from "next/link";
 
 const Dashboard = () => {
   const { classes } = useStyles();
+
+  // Date wise filter needed!
+  const router = useRouter();
+  const { day, month, year } = router.query;
+
   const [loading, setLoading] = useState(false);
   const [openModel, setModelOpen] = useState(false);
   const [selectRow, setSelectedRow] = useState({});
   const [loatsData, setLoatsData] = useState(loatsArr || []);
   const [isLTUpdateObj, setLTUpdateObj] = useState(null);
   const [upId, setUpId] = useState(null);
-  const isMobile = useMediaQuery("(max-width: 755px)");
-  const [value, setValue] = useState([
-    new Date(2021, 11, 1),
-    new Date(2021, 11, 5),
-  ]);
 
   const handleEditRow = (type, values) => {
     if (type == "edit") {
@@ -44,6 +44,7 @@ const Dashboard = () => {
       setLTUpdateObj(valueObj);
       setModelOpen(true);
     }
+
     if (type == "remove") {
       const data = loatsData.filter((d) => d.id != values.id);
       setLoatsData([...data]);
@@ -102,12 +103,6 @@ const Dashboard = () => {
             <ActionIcon
               color="red"
               onClick={() => {
-                // openDeleteModal(
-                //   "loat",
-                //   handleEditRow,
-                //   "remove",
-                //   cell.row.original
-                // );
                 openDeleteModal({
                   from: "loat",
                   fn: handleEditRow,
@@ -144,7 +139,7 @@ const Dashboard = () => {
   return (
     <>
       <HeaderCT
-        title="All Loats"
+        title="day wise loats"
         component={
           !isEmpty(selectRow) && (
             <Grid mx={10} justify="flex-end">
@@ -152,7 +147,6 @@ const Dashboard = () => {
                 color="red"
                 variant="light"
                 onClick={() => {
-                  // openDeleteModal("multiDeleteLoats", handleMultiDelete);
                   openDeleteModal({
                     from: "multiDeleteLoats",
                     fn: handleMultiDelete,
@@ -166,15 +160,19 @@ const Dashboard = () => {
         }
       />
       <div className={classes.innerLayout}>
-        <DateRangePicker
-          dropdownType={isMobile ? "modal" : "popover"}
-          mx={15}
-          fullWidth={true}
-          placeholder="Pick dates range"
-          value={value}
-          onChange={setValue}
-        />
+        <Title align="center">{day}</Title>
+        <Link
+          href={{
+            pathname: "/datewise/month",
+            query: { month, year },
+          }}
+        >
+          <Button color="teal" mx={15}>
+            <Text align="center">Back</Text>
+          </Button>
+        </Link>
         <MantineGridTable
+          withGlobalFilter={true}
           data={tblData}
           onRowSelectionChange={setSelectedRow}
           defaltState={selectRow}

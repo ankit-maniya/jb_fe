@@ -9,6 +9,7 @@ export const MantineGridTable = ({
   withRowSelection = false,
   onRowSelectionChange,
   defaltState,
+  withGlobalFilter=false
 }) => {
   const { classes } = useStyles();
 
@@ -20,7 +21,7 @@ export const MantineGridTable = ({
           data={data}
           withFixedHeader={true}
           noEllipsis={true}
-          // withGlobalFilter={true}
+          withGlobalFilter={withGlobalFilter}
           withPagination={true}
           withColumnFilters={true}
           withSorting={true}
