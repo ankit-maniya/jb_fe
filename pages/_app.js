@@ -44,6 +44,16 @@ class MyApp extends App {
         value || (this.state.colorScheme === "dark" ? "light" : "dark"),
     });
 
+  static async getInitialProps({ Component, ctx }) {
+    let pageProps = {};
+
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(ctx);
+    }
+
+    return { pageProps };
+  }
+
   render() {
     const { Component, pageProps } = this.props;
     return (
