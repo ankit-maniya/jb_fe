@@ -12,9 +12,11 @@ import {
 } from "@mantine/core";
 
 import useStyles from "./style";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { classes } = useStyles();
+  const router = useRouter();
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
@@ -22,10 +24,10 @@ export default function Home() {
       password: "",
     },
 
-    validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-      password: (val) => (val.length <= 0 ? "Password is Required" : null),
-    },
+    // validate: {
+    //   email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+    //   password: (val) => (val.length <= 0 ? "Password is Required" : null),
+    // },
   });
 
   return (
@@ -41,6 +43,7 @@ export default function Home() {
           <form
             onSubmit={form.onSubmit((values) => {
               console.log("login page", values);
+              router.push("/home");
             })}
           >
             <Paper className={classes.form} radius={0} p={30}>
