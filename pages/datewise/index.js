@@ -1,2 +1,1 @@
-export * from "./year"
-export * from "./month"
+export { default } from "./year";
