@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "../../redux/reducers/userReducer";
+// import { fetchUser } from "../../redux/reducers/userReducer";
 
 const User = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // dispatch(fetchUser())
   return (
     <div>

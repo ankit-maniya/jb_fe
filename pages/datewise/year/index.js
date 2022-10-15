@@ -21,7 +21,7 @@ const Year = () => {
             query: { year: year, month: d.month },
           }}
         >
-          <Button mt={5} fullWidth color={key % 2 == 0 ? "pink" : "blue"}>
+          <Button mt={5} fullwidth="true" color={key % 2 == 0 ? "pink" : "blue"}>
             <Text align="center">
               {d.month} ({d.total})
             </Text>

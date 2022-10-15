@@ -13,7 +13,6 @@ import { openDeleteModal } from "../../../helpers";
 export const CuttingTypeTable = ({ data, handleEditCutType }) => {
   // const theme = useMantineTheme();
   const rows = data.map((item) => {
-    console.log(item.c_colorcode);
     return (
       <tr key={item.id}>
         <td>{item.id}</td>

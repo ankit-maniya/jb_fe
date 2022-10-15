@@ -41,6 +41,11 @@ export const CuttingTypeModal = ({
 
   useEffect(() => {
     if (isUpdateObj) {
+
+      if (!isUpdateObj.c_colorcode) {
+        delete isUpdateObj.c_colorcode;
+      }
+
       form.setValues(isUpdateObj);
     }
   }, [isUpdateObj]);

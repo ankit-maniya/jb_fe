@@ -169,7 +169,7 @@ const Dashboard = () => {
         <DateRangePicker
           dropdownType={isMobile ? "modal" : "popover"}
           mx={15}
-          fullWidth={true}
+          fullwidth="true"
           placeholder="Pick dates range"
           value={value}
           onChange={setValue}

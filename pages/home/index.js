@@ -352,7 +352,7 @@ const Home = () => {
               />
             </Grid.Col>
             <Grid.Col md={6} lg={2} className={classes.addBtn}>
-              <Button fullWidth type="submit" className={classes.redBtnStyle}>
+              <Button fullwidth="true" type="submit" className={classes.redBtnStyle}>
                 {isUpdateId ? "Update" : "Add"}
               </Button>
             </Grid.Col>

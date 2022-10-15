@@ -152,7 +152,6 @@ export const LoatEditModal = ({
                 if (!key) return;
 
                 const cutType = cuttingTypeData.find((d) => d.c_id == key);
-                console.log("cutType :: ", cutType);
                 form.setFieldValue("l_price", parseFloat(cutType.c_price));
                 form.setFieldValue(
                   "l_multiwithdiamonds",
