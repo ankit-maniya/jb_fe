@@ -18,7 +18,7 @@ const getDays = (data = [], month, year) => {
           query: { day: d.day, month, year },
         }}
       >
-        <Button mt={5} fullWidth color={key % 2 == 0 ? "pink" : "blue"}>
+        <Button mt={5} fullwidth="true" color={key % 2 == 0 ? "pink" : "blue"}>
           <Text align="center">
             {d.day} ({d.total})
           </Text>

@@ -11,21 +11,30 @@ import {
 import { useForm } from "@mantine/form";
 import { IconCirclePlus } from "@tabler/icons";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import cloneDeep from "lodash/cloneDeep";
+
 import {
   CuttingTypeModal,
   CuttingTypeTable,
   HeaderCT,
   ReactToast,
 } from "../../../components";
-import { cuttingTypeData, partyData } from "../../../utils/dummydata";
 import useStyles from "./style";
+import CuttingTypeService from "../../../services/cuttingType.service";
+import { diff } from "../../../helpers";
 
 const AddParty = ({ updateId }) => {
   const router = useRouter();
   const updatePartyId = updateId;
+  const iResParty = useSelector((state) => state.partys);
+  const partyArr = cloneDeep(iResParty.data);
   const [openModel, setModelOpen] = useState(false);
   const [cuttypeData, setCuttypeData] = useState([]);
   const [isCTUpdateObj, setIsCTUpdateObj] = useState(null);
+  const [ctOrignalUpdateObj, setCTOrignalUpdateObj] = useState([]);
+  const [pTOrignalUpdateObj, setPTOrignalUpdateObj] = useState(null);
+
   const { classes } = useStyles();
 
   const upCuttypeArr = cuttypeData.filter((d, idx) => (d.id = idx + 1));
@@ -50,24 +59,31 @@ const AddParty = ({ updateId }) => {
     },
   });
 
+  const getCuttingTypes = async (partyId) => {
+    const cuttingType = await CuttingTypeService.getByParam({
+      params: { partyid: partyId },
+    });
+
+    setCuttypeData(cuttingType);
+    setCTOrignalUpdateObj(cuttingType);
+  };
+
   useEffect(() => {
     if (updatePartyId) {
-      const party = partyData.find((d) => d.id == updatePartyId);
+      const party = partyArr.find((d) => d.id == updatePartyId);
 
       if (!party) {
         router.push("/error");
         return;
       }
 
-      const cuttingType = cuttingTypeData.filter(
-        (ct) => ct.partyid == updatePartyId
-      );
+      getCuttingTypes(party.id);
 
-      setCuttypeData(cuttingType);
       if (party.p_mobile) {
         party.p_mobile = parseInt(party.p_mobile);
       }
 
+      setPTOrignalUpdateObj(party);
       form.setValues(party);
     }
   }, [updatePartyId]);
@@ -76,26 +92,28 @@ const AddParty = ({ updateId }) => {
     if (updatePartyId) return;
 
     form.reset();
+    setCTOrignalUpdateObj([]);
     setCuttypeData([]);
   };
 
   const handleLoatTypeSubmit = (values) => {
-    if (isCTUpdateObj) {
-      const upData = cuttypeData;
-      const upidx = upData.findIndex((d) => d.id == isCTUpdateObj.id);
-      upData[upidx] = { ...values, id: isCTUpdateObj.id };
-      setCuttypeData([...upData]);
-      setIsCTUpdateObj(null);
+    if (!isCTUpdateObj) {
+      setCuttypeData([...cuttypeData, values]);
       return;
     }
 
-    setCuttypeData([...cuttypeData, values]);
+    const upData = cloneDeep(cuttypeData);
+    const upidx = upData.findIndex((d) => d.id == isCTUpdateObj.id);
+    upData[upidx] = { ...values, id: isCTUpdateObj.id };
+    setCuttypeData([...upData]);
+    setIsCTUpdateObj(null);
   };
 
   const handleEditCutType = (isDelete, item) => {
     if (isDelete) {
       const upCutTypes = cuttypeData.filter((d) => d.id != item.id);
       setCuttypeData([...upCutTypes]);
+      setCTOrignalUpdateObj([...upCutTypes]);
       return;
     }
 
@@ -105,8 +123,13 @@ const AddParty = ({ updateId }) => {
 
   const handlePartySubmit = (values) => {
     console.log("isUpdateParty with Cuttingtype", updatePartyId);
-    console.log("cuttypeData :: ", cuttypeData);
-    console.log("party :: ", values);
+    if (updatePartyId) {
+      const finalParty = diff(values, pTOrignalUpdateObj);
+      console.log("finalParty :: ", finalParty);
+      const finalCuttingType = diff(cuttypeData, ctOrignalUpdateObj);
+      console.log("finalCuttingType :: ", finalCuttingType);
+    }
+
     ReactToast("success", "Party " + (updatePartyId ? "updated!" : "added!"));
     resetPartyForm();
   };

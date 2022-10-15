@@ -3,7 +3,6 @@ import { useForm } from "@mantine/form";
 
 import {
   Paper,
-  createStyles,
   TextInput,
   PasswordInput,
   Button,
@@ -13,10 +12,24 @@ import {
 
 import useStyles from "./style";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "../redux/reducers/user/reducer";
+import { useEffect } from "react";
 
 export default function Home() {
   const { classes } = useStyles();
   const router = useRouter();
+  const rdxState = useSelector((state) => state.user.user)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      router.push("/home");
+    }
+  });
+
   const form = useForm({
     validateInputOnChange: true,
     initialValues: {
@@ -24,11 +37,20 @@ export default function Home() {
       password: "",
     },
 
-    // validate: {
-    //   email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-    //   password: (val) => (val.length <= 0 ? "Password is Required" : null),
-    // },
+    validate: {
+      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
+      password: (val) => (val.length <= 0 ? "Password is Required" : null),
+    },
   });
+
+  const handleSubmit = (values) => {
+    const login = {
+      password: values.password,
+      u_email: values.email,
+    };
+
+    dispatch(fetchUser(login));
+  };
 
   return (
     <div>
@@ -42,8 +64,7 @@ export default function Home() {
         <div className={classes.wrapper}>
           <form
             onSubmit={form.onSubmit((values) => {
-              console.log("login page", values);
-              router.push("/home");
+              handleSubmit(values);
             })}
           >
             <Paper className={classes.form} radius={0} p={30}>
@@ -84,7 +105,7 @@ export default function Home() {
                 }
                 error={form.errors.password && form.errors.password}
               />
-              <Button fullWidth type="submit" mt="xl" size="md">
+              <Button fullwidth="true" type="submit" mt="xl" size="md">
                 Login
               </Button>
             </Paper>

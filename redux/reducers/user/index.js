@@ -1,18 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-
-export const fetchUser = createAsyncThunk("user/fetchUsers", () => {
-  return axios("https://jsonplaceholder.typicode.com/users").then(
-    (response) => {
-      return response.data;
-    }
-  );
-});
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchUser } from "./reducer";
 
 // Initial state
 const initialState = {
   loading: false,
-  users: [],
+  user: {},
   error: "",
 };
 
@@ -22,13 +14,13 @@ const pending = (state, action) => {
 
 const fulfilled = (state, action) => {
   state.loading = false;
-  state.users = action.payload;
+  state.user = action.payload;
   state.error = "";
 };
 
 const error = (state, action) => {
   state.loading = false;
-  state.users = [];
+  state.user = {};
   state.error = action.error;
 };
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   ScrollArea,
@@ -10,7 +10,7 @@ import {
   ActionIcon,
 } from "@mantine/core";
 import { keys } from "@mantine/utils";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDebouncedState, useMediaQuery } from "@mantine/hooks";
 
 import {
   IconSelector,
@@ -64,6 +64,10 @@ const filterData = (data, search, numberFields = []) => {
     return keys(data[0]).some((key) => {
       const isNumber = numberFields.includes(key);
 
+      if (!item[key]) {
+        return false;
+      }
+
       if (isNumber) {
         item[key] = item[key].toString();
       }
@@ -102,11 +106,11 @@ const sortData = (data, payload, numberFields) => {
   );
 };
 
-export const SimpleTable = ({ data, tblObj }) => {
+export const SimpleTable = ({ data, tblObj, loading }) => {
   const isMobile = useMediaQuery("(max-width: 755px)");
 
   const [search, setSearch] = useState("");
-  const [sortedData, setSortedData] = useState(data);
+  const [sortedData, setSortedData] = useDebouncedState([], 500);
   const [sortBy, setSortBy] = useState(null);
   const [reverseSortDirection, setReverseSortDirection] = useState(false);
   const { classes } = useStyles();
@@ -116,6 +120,11 @@ export const SimpleTable = ({ data, tblObj }) => {
     fixedWidthColumn = [],
     showOperations = false,
   } = tblObj;
+
+  useEffect(() => {
+    setSortedData(data);
+  }, [data]);
+
 
   const setSorting = (field) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
@@ -137,6 +146,7 @@ export const SimpleTable = ({ data, tblObj }) => {
       )
     );
   };
+
 
   const getTableHeaders = () => {
     const headerObj = displayFields.map((item, key) => {
@@ -167,7 +177,7 @@ export const SimpleTable = ({ data, tblObj }) => {
 
   const addTableRow = (headers, row) => {
     return (
-      <tr key={row.id}>
+      <tr key={row.index}>
         {headers.map((h, key) => {
           return (
             <td key={key} className={!isMobile && classes.centerText}>
@@ -213,10 +223,10 @@ export const SimpleTable = ({ data, tblObj }) => {
     <>
       <TextInput
         placeholder="Search Party"
+        defaultValue={search}
         mb="md"
         icon={<IconSearch size={14} stroke={1.5} />}
-        value={search}
-        onChange={handleSearchChange}
+        onChange={(event) => handleSearchChange(event)}
       />
       <ScrollArea>
         <Table
