@@ -15,4 +15,14 @@ export default class CuttingTypeService {
 
     return res.data.results
   }
+
+  static async patch(cuttingId, payload) {
+    const res = await gAxios.patch(`api/cuttingtype/${cuttingId}/`, payload);
+
+    if (!res.data) {
+      return [];
+    }
+
+    return res.data.data
+  }
 }

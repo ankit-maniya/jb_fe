@@ -89,7 +89,12 @@ export const diff = (obj1, obj2) => {
             result["newObj"] = [value];
           }
         }
-      } else if (!_.isEqual(value, obj2[key])) {
+      } else if (!_.isEqual(value, obj2[key]) && !["c_price", "updatedat"].includes(key)) {
+        result[key] = value;
+      } else if (["c_price"].includes(key)) {
+        if (parseFloat(value).toFixed(2) != parseFloat(obj2[key]).toFixed(2))
+          result[key] = value;
+      } else if (["c_id"].includes(key)) {
         result[key] = value;
       }
       return result;

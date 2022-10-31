@@ -11,8 +11,10 @@ import {
 import { useForm } from "@mantine/form";
 import { IconCirclePlus } from "@tabler/icons";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import cloneDeep from "lodash/cloneDeep";
+
+import useStyles from "./style";
 
 import {
   CuttingTypeModal,
@@ -20,24 +22,35 @@ import {
   HeaderCT,
   ReactToast,
 } from "../../../components";
-import useStyles from "./style";
-import CuttingTypeService from "../../../services/cuttingType.service";
 import { diff } from "../../../helpers";
+
+import {
+  editParty,
+  editCuttingType,
+  updateCuttingTypeObj,
+} from "../../../redux/reducers/party";
+
+import CuttingTypeService from "../../../services/cuttingType.service";
+import { toast } from "react-toastify";
 
 const AddParty = ({ updateId }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const updatePartyId = updateId;
   const iResParty = useSelector((state) => state.partys);
-  const partyArr = cloneDeep(iResParty.data);
+  const iParty = cloneDeep(iResParty);
+  const partyArr = iParty.data;
+  const pTOrignalUpdateObj = iParty.editParty;
+  const ctOrignalUpdateObj = iParty.editCuttingType;
+
+  console.log('iResParty :: ', iResParty);
+
   const [openModel, setModelOpen] = useState(false);
   const [cuttypeData, setCuttypeData] = useState([]);
   const [isCTUpdateObj, setIsCTUpdateObj] = useState(null);
-  const [ctOrignalUpdateObj, setCTOrignalUpdateObj] = useState([]);
-  const [pTOrignalUpdateObj, setPTOrignalUpdateObj] = useState(null);
 
   const { classes } = useStyles();
-
-  const upCuttypeArr = cuttypeData.filter((d, idx) => (d.id = idx + 1));
 
   const form = useForm({
     validateInputOnChange: true,
@@ -64,35 +77,37 @@ const AddParty = ({ updateId }) => {
       params: { partyid: partyId },
     });
 
+    // const cuttingData = cuttingType.filter((d, idx) => (d.id = idx + 1));
+
     setCuttypeData(cuttingType);
-    setCTOrignalUpdateObj(cuttingType);
+    dispatch(editCuttingType(cuttingType));
   };
 
   useEffect(() => {
-    if (updatePartyId) {
-      const party = partyArr.find((d) => d.id == updatePartyId);
+    if (!updatePartyId) return;
 
-      if (!party) {
-        router.push("/error");
-        return;
-      }
+    const party = partyArr.find((d) => d.id == updatePartyId);
 
-      getCuttingTypes(party.id);
-
-      if (party.p_mobile) {
-        party.p_mobile = parseInt(party.p_mobile);
-      }
-
-      setPTOrignalUpdateObj(party);
-      form.setValues(party);
+    if (!party) {
+      router.push("/error");
+      return;
     }
+
+    getCuttingTypes(party.id);
+
+    if (party.p_mobile) {
+      party.p_mobile = parseInt(party.p_mobile);
+    }
+
+    dispatch(editParty(party));
+    form.setValues(party);
   }, [updatePartyId]);
 
   const resetPartyForm = () => {
     if (updatePartyId) return;
 
     form.reset();
-    setCTOrignalUpdateObj([]);
+    dispatch(editCuttingType([]));
     setCuttypeData([]);
   };
 
@@ -103,31 +118,70 @@ const AddParty = ({ updateId }) => {
     }
 
     const upData = cloneDeep(cuttypeData);
-    const upidx = upData.findIndex((d) => d.id == isCTUpdateObj.id);
-    upData[upidx] = { ...values, id: isCTUpdateObj.id };
+    const upidx = upData.findIndex((d) => d.c_id == isCTUpdateObj.c_id);
+    upData[upidx] = { ...values, c_id: isCTUpdateObj.c_id };
     setCuttypeData([...upData]);
     setIsCTUpdateObj(null);
   };
 
   const handleEditCutType = (isDelete, item) => {
     if (isDelete) {
-      const upCutTypes = cuttypeData.filter((d) => d.id != item.id);
+      const upCutTypes = cuttypeData.filter((d) => d.c_id != item.c_id);
       setCuttypeData([...upCutTypes]);
-      setCTOrignalUpdateObj([...upCutTypes]);
+      dispatch(editCuttingType([...upCutTypes]));
       return;
     }
 
-    setIsCTUpdateObj(item);
+    setIsCTUpdateObj(cloneDeep(item));
     setModelOpen(true);
   };
 
-  const handlePartySubmit = (values) => {
+  const handlePartySubmit = async (values) => {
     console.log("isUpdateParty with Cuttingtype", updatePartyId);
     if (updatePartyId) {
       const finalParty = diff(values, pTOrignalUpdateObj);
-      console.log("finalParty :: ", finalParty);
-      const finalCuttingType = diff(cuttypeData, ctOrignalUpdateObj);
-      console.log("finalCuttingType :: ", finalCuttingType);
+
+      let finalCuttingType = diff(cuttypeData, ctOrignalUpdateObj);
+      console.log(cuttypeData, ctOrignalUpdateObj);
+      const newCuttingObj = finalCuttingType.newObj;
+
+      finalCuttingType = Object.values(finalCuttingType);
+      finalCuttingType = finalCuttingType.filter(
+        (d) => Object.keys(d).length > 1
+      );
+
+      const fLength = finalCuttingType.length;
+      const upArr = [];
+      if (fLength) {
+        for (let i = 0; i <= fLength; i++) {
+          const catId = finalCuttingType[i]?.c_id;
+          delete finalCuttingType[i]?.c_id;
+
+          if (catId) {
+            console.log('catId :: ', catId);
+            const id = toast.loading("Please wait...");
+            const data = await CuttingTypeService.patch(
+              catId,
+              finalCuttingType[i]
+            );
+
+            upArr.push(data);
+
+            toast.update(id, {
+              render: "All is good",
+              type: "success",
+              isLoading: false,
+              autoClose: true,
+              closeOnClick: true,
+            });
+          }
+        }
+
+        if (upArr.length) {
+          console.log("upArr : ", upArr);
+          dispatch(updateCuttingTypeObj(upArr));
+        }
+      }
     }
 
     ReactToast("success", "Party " + (updatePartyId ? "updated!" : "added!"));
@@ -209,7 +263,7 @@ const AddParty = ({ updateId }) => {
       {/* Display Cutting Type Data */}
       <div className={classes["m-xs"]}>
         <CuttingTypeTable
-          data={upCuttypeArr}
+          data={cuttypeData}
           handleEditCutType={(isDel, item) => handleEditCutType(isDel, item)}
         />
       </div>

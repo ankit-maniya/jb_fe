@@ -6,6 +6,8 @@ const initialState = {
   loading: false,
   data: [],
   error: "",
+  editParty: {},
+  editCuttingType: {},
 };
 
 const pending = (state, action) => {
@@ -28,11 +30,40 @@ const error = (state, action) => {
 export const partySlice = createSlice({
   name: "partys",
   initialState,
+  reducers: {
+    editParty: (state, action) => {
+      state.editParty = { ...state.editParty, ...action.payload };
+    },
+    editCuttingType: (state, action) => {
+      state.editCuttingType = { ...state.editCuttingType, ...action.payload };
+    },
+    updateCuttingTypeObj: (state, action) => {
+      const payload = action.payload;
+      console.log(payload);
+      if (payload.length) {
+        payload.forEach((d, i) => {
+          // state.editCuttingType[i] = d;
+          Object.values(state.editCuttingType).forEach((data, idx) => {
+            if (data.c_id == d.c_id) {
+              state.editCuttingType[idx] = d;
+            }
+          });
+        });
+
+        console.log("state.editCuttingType", state.editCuttingType);
+
+        // state.editCuttingType = { ...state.editCuttingType, ...action.payload };
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchPartys.pending, pending);
     builder.addCase(fetchPartys.fulfilled, fulfilled);
     builder.addCase(fetchPartys.rejected, error);
   },
 });
+
+export const { editParty, editCuttingType, updateCuttingTypeObj } =
+  partySlice.actions;
 
 export default partySlice.reducer;

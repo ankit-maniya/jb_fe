@@ -41,10 +41,13 @@ export const CuttingTypeModal = ({
 
   useEffect(() => {
     if (isUpdateObj) {
+      console.log("isUpdateObj :: ", isUpdateObj);
 
       if (!isUpdateObj.c_colorcode) {
         delete isUpdateObj.c_colorcode;
       }
+
+      isUpdateObj.c_price = parseFloat(isUpdateObj.c_price);
 
       form.setValues(isUpdateObj);
     }

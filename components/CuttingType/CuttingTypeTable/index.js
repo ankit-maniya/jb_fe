@@ -12,10 +12,10 @@ import { openDeleteModal } from "../../../helpers";
 
 export const CuttingTypeTable = ({ data, handleEditCutType }) => {
   // const theme = useMantineTheme();
-  const rows = data.map((item) => {
+  const rows = data.map((item, idx) => {
     return (
-      <tr key={item.id}>
-        <td>{item.id}</td>
+      <tr key={idx}>
+        <td>{idx}</td>
         <td>
           <Button
             style={{
